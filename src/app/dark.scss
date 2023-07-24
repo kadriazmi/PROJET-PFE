@@ -1,0 +1,14 @@
+@use '../modules/shared/assets/styles/base';
+@use '../modules/shared/assets/styles/abstracts' as *;
+
+#dark {
+  background-color: #0d1116;
+
+  .main-layout-outlet,
+  .sidebar-items,
+  .navbar,
+  .sidebar,
+  .sidebar-content {
+    background-color: #1e232b;
+  }
+}
