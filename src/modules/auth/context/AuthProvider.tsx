@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 import jwtDecode from 'jwt-decode'
 import axiosInstance from '../utils/axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { clearTokens, getTokens, setTokens } from '../utils/token'
+import { clearTokens, getTokens } from '../utils/token'
 import useIsMountedRef from '../hook/useIsMountedRef'
 import { initialise } from '../data/authSlice'
 import { RootState } from '@src/modules/shared/store'
+import LazyLoad from '@src/modules/shared/components/LazyLoad/LazyLoad'
 
 interface AuthProviderProps {
   children: React.ReactNode
@@ -35,9 +36,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     async function fetchUser() {
       const { refresh_token } = getTokens()
       if (refresh_token && isValidToken(refresh_token)) {
-        const response = await axiosInstance.post('/whoami', { refresh_token })
-        const { access_token, user } = response.data.data
-        setTokens(access_token)
+        const response = await axiosInstance.get('/api/auth/me')
+        const user = response.data.payload
         dispatch(initialise({ isAuthenticated: true, user }))
       } else {
         dispatch(initialise({ isAuthenticated: false, user: null }))
@@ -50,7 +50,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [])
 
   if (!isInitialised) {
-    return <p>SplashScreen</p>
+    return <LazyLoad />
   }
 
   return <>{children}</>

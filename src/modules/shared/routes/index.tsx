@@ -3,6 +3,7 @@ import { Suspense, Fragment } from 'react'
 import { Routes, Route, RouteProps } from 'react-router-dom'
 
 import pages from './routes'
+import LazyLoad from '../components/LazyLoad/LazyLoad'
 
 type RouteConfig = {
   exact: boolean | null
@@ -13,7 +14,7 @@ type RouteConfig = {
 } & RouteProps
 
 export const renderRoutes = (routes: RouteConfig[] = []) => (
-  <Suspense fallback={<p>loading...</p>}>
+  <Suspense fallback={<LazyLoad />}>
     <Routes>
       {routes.map((route, index) => {
         const Component = route.component

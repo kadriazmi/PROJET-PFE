@@ -7,8 +7,13 @@
   .main-layout-outlet,
   .sidebar-items,
   .navbar,
-  .sidebar,
   .sidebar-content {
     background-color: #1e232b;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .sidebar {
+      background-color: #1e232b;
+    }
   }
 }

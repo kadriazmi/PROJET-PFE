@@ -34,7 +34,7 @@
     display: none;
     position: fixed;
     width: 100%;
-    z-index: 99;
+    z-index: 998;
     box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
   }
 
@@ -43,7 +43,7 @@
       padding: 0;
       position: absolute;
       top: 0;
-      left: -380px;
+      left: -280px;
       height: 100vh;
       transition: all 0.35s ease-out;
     }

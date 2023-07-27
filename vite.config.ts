@@ -14,5 +14,12 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+
+    // to get images from the server
+    // proxy: {
+    //   '^/users': {
+    //     target: 'http://localhost:8000/',
+    //   },
+    // },
   },
 })

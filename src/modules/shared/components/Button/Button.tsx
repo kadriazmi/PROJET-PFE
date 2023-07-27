@@ -8,6 +8,8 @@ interface IButtonProps extends HTMLAttributes<HTMLButtonElement> {
   outlined?: boolean
   rounded?: boolean
   disabled?: boolean
+  loading?: boolean
+  type?: 'button' | 'submit' | 'reset'
   children?: ReactNode
 }
 
@@ -20,6 +22,7 @@ const Button: React.FC<IButtonProps> = ({
   rounded,
   disabled,
   children,
+  loading,
   ...props
 }) => {
   return (
@@ -29,12 +32,14 @@ const Button: React.FC<IButtonProps> = ({
         `btn-${size}`,
         `${outlined ? 'btn-outlined' : 'btn'}-${variant}`,
         `${rounded ? 'btn-rounded' : ''}`,
-        `${disabled ? 'btn-disabled' : ''}`
+        `${disabled ? 'btn-disabled' : ''}`,
       ].join(' ')}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...props}
     >
-      {children ? (
+      {loading ? (
+        'loading...'
+      ) : children ? (
         children
       ) : (
         <>
@@ -48,7 +53,15 @@ const Button: React.FC<IButtonProps> = ({
 
 type ButtonDefaultProps = Pick<
   IButtonProps,
-  'icon' | 'label' | 'variant' | 'size' | 'outlined' | 'rounded' | 'disabled' | 'children'
+  | 'icon'
+  | 'label'
+  | 'variant'
+  | 'size'
+  | 'outlined'
+  | 'rounded'
+  | 'disabled'
+  | 'children'
+  | 'loading'
 >
 
 Button.defaultProps = {
@@ -58,8 +71,9 @@ Button.defaultProps = {
   size: 'md',
   outlined: false,
   rounded: false,
+  loading: false,
   disabled: false,
-  children: null
+  children: null,
 } as ButtonDefaultProps
 
 export default Button

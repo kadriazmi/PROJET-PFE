@@ -1,4 +1,4 @@
-.login-module {
+.register-module {
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -6,7 +6,7 @@
   align-items: center;
   background-color: #f1f5f9;
 
-  .login-card-container {
+  .register-card-container {
     width: 420px;
     padding: 32px 22px;
     background-color: #fff;
@@ -29,7 +29,7 @@
   }
 
   @media only screen and (max-width: 475px) {
-    .login-card-container {
+    .register-card-container {
       width: 85%;
     }
   }

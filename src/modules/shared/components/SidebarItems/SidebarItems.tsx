@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { SIDEBARITEMS } from '../Sidebar/items'
+import { useTranslation } from 'react-i18next'
 
 interface ISidebarItemsProps {
   collapseSidebar: boolean
@@ -7,6 +8,7 @@ interface ISidebarItemsProps {
 
 const SidebarItems: React.FC<ISidebarItemsProps> = ({ collapseSidebar }) => {
   const { pathname } = useLocation()
+  const { t } = useTranslation('sidebar')
 
   return (
     <div className="sidebar-items">
@@ -24,7 +26,7 @@ const SidebarItems: React.FC<ISidebarItemsProps> = ({ collapseSidebar }) => {
             >
               {route?.icon}
             </div>
-            {!collapseSidebar ? route?.label.toUpperCase() : null}
+            {!collapseSidebar ? t(`sidebar.${route?.label.toLowerCase()}`).toUpperCase() : null}
           </Link>
         )
       })}

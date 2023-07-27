@@ -3,6 +3,7 @@ import GuestLayout from '@src/modules/shared/layout/GuestLayout/GuestLayout'
 import GuestGuard from '../../shared/guards/GuestGuard'
 import { Navigate, RouteProps } from 'react-router-dom'
 import { Fragment, lazy } from 'react'
+import { PATH } from './paths'
 
 type RouteConfig = {
   exact: boolean | null
@@ -16,15 +17,22 @@ const routes: RouteConfig[] = [
   // GuestGuard Routes
   {
     exact: true,
-    path: '/',
+    path: PATH.ROOT,
     guard: GuestGuard,
     component: () => <Navigate to="/login" />,
   },
   {
     exact: true,
     guard: GuestGuard,
-    path: '/login',
+    path: PATH.LOGIN,
     component: lazy(() => import('../features/Login/Login')),
+    layout: GuestLayout,
+  },
+  {
+    exact: true,
+    guard: GuestGuard,
+    path: PATH.REGISTER,
+    component: lazy(() => import('../features/Register/Register')),
     layout: GuestLayout,
   },
 ]
