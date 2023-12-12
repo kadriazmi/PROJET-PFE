@@ -1,10 +1,11 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { VITE_APP_ENABLE_REDUX_DEVTOOLS } from '@src/config'
 import { configureStore } from '@reduxjs/toolkit'
 import rootReducer from './rootReducer'
 
 export const store = configureStore({
   reducer: rootReducer,
-  devTools: !!import.meta.env.VITE_APP_ENABLE_REDUX_DEVTOOLS || false,
+  devTools: VITE_APP_ENABLE_REDUX_DEVTOOLS,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([]),
 })
 

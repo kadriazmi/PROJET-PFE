@@ -1,5 +1,11 @@
-build/
-dist/
-logs/
-node_modules/
+build/*
+dist/*
+logs/*
+public/*
 *.md
+**/out/*
+**/.next/*
+**/node_modules/*
+
+package-lock.json
+yarn.lock

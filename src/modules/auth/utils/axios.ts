@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(
     return config
   },
   (error) => {
-    Promise.reject(error)
+    return Promise.reject(error)
   }
 )
 
@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
         window.location.replace('/')
       }
     }
-    return Promise.reject('Something went wrong')
+    return Promise.reject((error.response && error.response.data) || 'Something went wrong!')
   }
 )
 
