@@ -10,7 +10,7 @@ const headers = {
 const axiosInstance = axios.create({
   baseURL,
   headers,
-  withCredentials: true,
+  // withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(
@@ -33,14 +33,18 @@ axiosInstance.interceptors.response.use(
     if (error?.response?.status === 401 && !previousRequest?.sent) {
       previousRequest.sent = true
       try {
-        const response = await axiosInstance.get('/api/auth/refresh')
+        const { refresh_token } = getTokens()
+        const response = await axios.get(baseURL + '/api/auth/refresh', {
+          headers: {
+            Authorization: `Bearer ${refresh_token}`,
+          },
+        })
         const { accessToken } = response.data.payload
         setTokens(accessToken)
         previousRequest.headers['Authorization'] = `Bearer ${accessToken}`
         return axiosInstance(previousRequest)
       } catch (err) {
         clearTokens()
-        window.location.replace('/')
       }
     }
     return Promise.reject((error.response && error.response.data) || 'Something went wrong!')
