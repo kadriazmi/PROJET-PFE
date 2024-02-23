@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { clearTokens, setTokens } from '../utils/token'
+import { clearTokens} from '../utils/token'
 import { login, logout } from './authThunk'
 
 export interface AuthState {
   status: string
   isAuthenticated: boolean
   isInitialised: boolean
-  user: {
-    id: string
-    name: string
-    email: string
-  } | null
+  user: any | null
   error: string | null
 }
 
@@ -43,8 +39,7 @@ const authSlice = createSlice({
       state.status = 'loading'
     })
     builder.addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
-      const { accessToken, refreshToken, user } = action.payload.payload
-      setTokens(accessToken, refreshToken)
+      const { user } = action.payload
       state.isAuthenticated = true
       state.user = user
       state.status = 'succeeded'

@@ -1,0 +1,8 @@
+// set up : npm i 
+//dependecies : 
+
+framer-motion 
+@supabase/supabase-js 
+antd
+//start dev mode :
+ npm run dev

@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import jwtDecode from 'jwt-decode'
-import axiosInstance from '../utils/axios'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { clearTokens, getTokens } from '../utils/token'
 import useIsMountedRef from '../hook/useIsMountedRef'
 import { initialise } from '../data/authSlice'
-import { RootState } from '@src/modules/shared/store'
-import LazyLoad from '@src/modules/shared/components/LazyLoad/LazyLoad'
+import { supabase } from '@src/modules/shared/utils/supabase'
 
 interface AuthProviderProps {
   children: React.ReactNode
@@ -18,8 +16,6 @@ interface JwtPayload {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const isMounted = useIsMountedRef()
-
-  const { isInitialised } = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch()
 
   const isValidToken = (token: string) => {
@@ -32,26 +28,23 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     if (!isMounted.current) {
       return
     }
-
     async function fetchUser() {
-      const { refresh_token } = getTokens()
-      if (refresh_token && isValidToken(refresh_token)) {
-        const response = await axiosInstance.get('/api/auth/me')
-        const user = response.data.payload
-        dispatch(initialise({ isAuthenticated: true, user }))
-      } else {
-        dispatch(initialise({ isAuthenticated: false, user: null }))
-        clearTokens()
+      const tokens = getTokens()
+      if (tokens?.refresh_token && tokens?.refresh_token.length > 2) {
+        if (tokens?.refresh_token && isValidToken(tokens?.refresh_token)) {
+          const response = await supabase.auth.getUser()
+          await supabase.auth.getSession()
+          const user = response.data
+          dispatch(initialise({ isAuthenticated: true, user }))
+        } else {
+          dispatch(initialise({ isAuthenticated: false, user: null }))
+          clearTokens()
+        }
       }
     }
 
     fetchUser()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  if (!isInitialised) {
-    return <LazyLoad />
-  }
 
   return <>{children}</>
 }

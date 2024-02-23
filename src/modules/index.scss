@@ -1,3 +1,5 @@
 @forward './shared';
 @forward './auth';
 @forward './dashboard';
+@forward './Repositories/index';
+@forward './PullRequests/index';

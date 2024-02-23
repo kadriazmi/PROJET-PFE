@@ -1,0 +1,7 @@
+@use '../../assets/styles/abstracts/mixins' as *;
+.main-container {
+  @include Flex(column, start, center);
+  padding: 2rem;
+  overflow: auto;
+  width: 100%;
+}

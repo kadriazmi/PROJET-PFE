@@ -1,0 +1,151 @@
+@use '../../../shared/assets/styles/abstracts/mixins' as *;
+.pull-requests__container {
+  @include Flex();
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+.pull-request {
+  width: 100%;
+  .ant-collapse {
+    width: 100%;
+    border: 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    &-header {
+      padding: 0.5rem !important;
+      align-items: center !important;
+    }
+  }
+  .ant-collapse-item {
+    width: 100%;
+    padding: 1rem;
+    @include GlassEffect();
+    border-radius: 0;
+    gap: 0.5rem;
+    background: rgba(24, 24, 24, 0.531);
+    &:last-child > .ant-collapse-content {
+      border-radius: 0.5rem;
+    }
+  }
+  .ant-collapse-arrow {
+    svg path {
+      fill: white;
+    }
+  }
+  .ant-collapse-content {
+    border-radius: 0.5rem;
+  }
+
+  &__header {
+    width: 100%;
+    @include Flex(row, space-between);
+    &__primary {
+      @include Flex(column, start, start);
+      gap: 0.5rem;
+      &__title {
+        color: white;
+        font-weight: 800;
+      }
+      &__date {
+        color: rgb(200, 199, 199);
+        font-weight: 500;
+        font-size: 0.7rem;
+      }
+    }
+    &__info {
+      @include Flex(column, start, center);
+      gap: 0.5rem;
+      &__date {
+        color: rgb(200, 199, 199);
+        font-weight: 500;
+        font-size: 0.7rem;
+      }
+      &__up {
+        @include Flex(row, space-between);
+        gap: 1rem;
+        width: 100%;
+      }
+      &__status {
+        @include Flex();
+        gap: 0.5rem;
+        &__text {
+          text-transform: capitalize;
+        }
+        &__icon {
+          width: 1.5rem;
+        }
+        .status--close {
+          color: rgb(235, 33, 50);
+        }
+        .status--open {
+          color: green;
+        }
+      }
+      &__image {
+        width: 1.8rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 1px dashed rgb(117, 117, 117);
+        &--src {
+          width: 100%;
+          aspect-ratio: 1;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+  &__commit {
+    @include Flex(column);
+    width: 100%;
+    &__container{
+      @include Flex(column);
+      width: 100%;
+    }
+    &__title {
+      text-transform: capitalize;
+      text-align: left;
+      font-weight: 700;
+      background: rgb(245, 96, 128);
+      color: white;
+      align-self: flex-start;
+      padding: 0.2rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    &__content {
+      width: 100%;
+      @include Flex(row, space-between);
+      padding: 0.5rem;
+      border-bottom: 1px solid #eeeded;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      border-radius: 0.5rem;
+      &:last-child {
+        border: 0;
+      }
+      &:hover {
+        background: rgba(128, 128, 128, 0.255);
+      }
+      &__primary {
+        @include Flex();
+        gap: 1rem;
+        &__img {
+          width: 2rem;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          border: 1px dashed rgba(0, 0, 0, 0.456);
+        }
+        &__title {
+          font-weight: 700;
+          font-size: 0.8rem;
+        }
+      }
+      &__date {
+        color: rgb(112, 112, 112);
+        font-size: 0.7rem;
+      }
+    }
+  }
+}

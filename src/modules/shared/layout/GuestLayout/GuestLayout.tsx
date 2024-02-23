@@ -1,11 +1,5 @@
-import { Fragment } from 'react'
+import { Fragment, ReactElement } from 'react'
 
-interface MainLayoutProps {
-  children: React.ReactNode
-}
-
-const GuestLayout = ({ children }: MainLayoutProps) => {
+export default function GuestLayout({ children }: { children: ReactElement | ReactElement[] }) {
   return <Fragment>{children}</Fragment>
 }
-
-export default GuestLayout

@@ -1,4 +1,4 @@
-import { clearTokens, getTokens, setTokens } from './token'
+import { clearTokens, getTokens } from './token'
 import axios from 'axios'
 
 const baseURL = import.meta.env.VITE_APP_BASE_URL as string
@@ -16,6 +16,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const { access_token } = getTokens()
+    console.log(access_token , 'token')
     if (access_token) {
       config.headers['Authorization'] = `Bearer ${access_token}`
     }
@@ -39,9 +40,7 @@ axiosInstance.interceptors.response.use(
             Authorization: `Bearer ${refresh_token}`,
           },
         })
-        const { accessToken } = response.data.payload
-        setTokens(accessToken)
-        previousRequest.headers['Authorization'] = `Bearer ${accessToken}`
+  
         return axiosInstance(previousRequest)
       } catch (err) {
         clearTokens()

@@ -4,6 +4,7 @@ import GuestGuard from '../../shared/guards/GuestGuard'
 import { Navigate, RouteProps } from 'react-router-dom'
 import { Fragment, lazy } from 'react'
 import { PATH } from './paths'
+import UniverseWrapper from '@src/modules/shared/layout/UniverseWrapper'
 
 type RouteConfig = {
   exact: boolean | null
@@ -26,14 +27,7 @@ const routes: RouteConfig[] = [
     guard: GuestGuard,
     path: PATH.LOGIN,
     component: lazy(() => import('../features/Login/Login')),
-    layout: GuestLayout,
-  },
-  {
-    exact: true,
-    guard: GuestGuard,
-    path: PATH.REGISTER,
-    component: lazy(() => import('../features/Register/Register')),
-    layout: GuestLayout,
+    layout: (props: any) => <UniverseWrapper {...props} includeGlobe />,
   },
 ]
 
