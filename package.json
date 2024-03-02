@@ -14,6 +14,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@fluentui/react-file-type-icons": "^8.11.3",
     "@reduxjs/toolkit": "^1.9.5",
     "@supabase/supabase-js": "^2.39.6",
     "accessible-nprogress": "^2.1.2",
@@ -21,6 +22,7 @@
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
+    "diff2html": "^3.4.47",
     "formik": "^2.4.2",
     "framer-motion": "^11.0.5",
     "husky": "^8.0.3",
@@ -30,9 +32,12 @@
     "i18next-http-backend": "^2.2.1",
     "jquery": "^3.7.1",
     "jwt-decode": "^3.1.2",
+    "node-fetch": "^3.3.2",
     "npm": "^10.4.0",
+    "prism-react-renderer": "^2.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-file-icon": "^1.4.0",
     "react-helmet-async": "^2.0.3",
     "react-i18next": "^13.0.0",
     "react-lottie": "^1.2.4",

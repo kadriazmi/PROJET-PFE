@@ -4,6 +4,7 @@
   flex-wrap: wrap;
   padding: 1rem;
   overflow-y: auto;
+  gap: 2rem;
   &__card {
     width: 10rem;
     @include Flex(column);
@@ -24,5 +25,8 @@
         text-transform: capitalize;
       }
     }
+  }
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

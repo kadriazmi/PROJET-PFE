@@ -24,9 +24,10 @@ export default function Repositories() {
         links: [{ name: 'repositories', href: '' }],
         title: 'repositories',
       }}
+      style={{ paddingBottom: 0 }}
     >
       {isLoading ? (
-        <LoadingScreen />
+        <LoadingScreen blur/>
       ) : (
         <div className="repositories-container">
           {!repositories || repositories?.length === 0 ? (
