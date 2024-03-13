@@ -28,9 +28,20 @@ export async function fetchOneFileChangesContent(props: {
   sha: string
   path: string
 }) {
-  const { repo, owner, path, sha } = props
+  const { repo, owner, sha, path } = props
   try {
-    const response = await axiosInstance.get(`repos/${owner}/${repo}/compare/hotfixs...develop`)
+    const response = await axiosInstance.get(
+      endpoints.getOneFileChanges
+        .replace(':user', owner)
+        .replace(':repo', repo)
+        .replace(':path', path)
+        .replace(':sha', sha),
+      {
+        headers: {
+          Accept: 'application/vnd.github.v3.diff',
+        },
+      }
+    )
     return response.data
   } catch (error) {
     message.error('Failed to fetch file content')

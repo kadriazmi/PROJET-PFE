@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
 import GithubIcon from '@src/modules/shared/assets/icons/github'
 import { supabase } from '@src/modules/shared/utils/supabase'
-import { message } from 'antd'
 import CardBalance from '@src/modules/shared/components/Cards/Card-BALANCE/Card-balance'
 import Canvas from '@src/modules/shared/components/Canvas/Canvas'
 import { PATH } from '../../routes/paths'
@@ -14,8 +12,6 @@ const Login = () => {
         redirectTo: `${currentPageUrl}${PATH.LOGIN}`,
       },
     })
-    await supabase.auth.getSession()
-    message.success('Sign in successfuly')
   }
 
   return (

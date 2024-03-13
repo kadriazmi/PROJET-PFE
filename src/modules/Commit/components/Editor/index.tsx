@@ -1,25 +1,32 @@
 import ReviewButton from '@src/modules/shared/components/Buttons/Review'
 import { Modal } from 'antd'
-import { Highlight, themes } from 'prism-react-renderer'
 import { useState } from 'react'
 import emptyFileIcon from '../../../shared/assets/icons/svgs/no-data.svg'
-import FileExtensionIcon from '../FileExtensionIcon'
 import HilightCode from '../Hilights'
 import StreamComponent from '../Stream'
+
 interface IFile {
   file: {
     content: string
     name: string
     path: string
   }
+  readyToUse?: string
+  htmlContent?: string
 }
-export default function Editor({ file }: IFile) {
+export default function Editor({ file, readyToUse, htmlContent }: IFile) {
   const [isModalOpen, setModalState] = useState(false)
   return (
     <div className="editor">
-      {file.content ? (
+      {file.content || htmlContent ? (
         <>
-          <HilightCode file={file}  addLinesNumbers/>
+          {htmlContent ? (
+            <div className="code-diff__wrapper">
+              <div className="code-diff" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+            </div>
+          ) : file.content ? (
+            <HilightCode file={file} addLinesNumbers readyToUse={readyToUse} />
+          ) : null}
           <ReviewButton title={'Review changes'} onClick={() => setModalState(true)} />
         </>
       ) : (

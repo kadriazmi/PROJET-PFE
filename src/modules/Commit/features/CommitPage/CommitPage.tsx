@@ -1,7 +1,9 @@
-import {  useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Tooltip } from 'antd'
+import * as Diff2Html from 'diff2html'
+import 'diff2html/bundles/css/diff2html.min.css'
 import { PATH } from '@src/modules/auth/routes/paths'
 import LoadingScreen from '@src/modules/shared/components/Loading'
 import MainContainer from '@src/modules/shared/layout/MainContainer/MainContainer'
@@ -9,9 +11,6 @@ import { useAppSelector } from '@src/modules/shared/store'
 import { fetchOneCommit } from '@src/modules/shared/store/Queries/Commits'
 import Editor from '../../components/Editor'
 import emptyFile from '../../../shared/assets/images/folder_empty.png'
-
-import 'diff2html/bundles/css/diff2html.min.css'
-
 import {
   fetchOneFileChangesContent,
   fetchOneFileContent,
@@ -26,6 +25,7 @@ export default function CommitPage() {
   const { id, commitId } = useParams()
   const { user } = useAppSelector((state) => state.auth)
   const [selectedFile, setSelectedFile] = useState<{ path: string; sha: string } | null>(null)
+  const [htmlString, setHtmlString] = useState('')
 
   const { data: commitContent, isLoading: isCommitContentLoading } = useQuery({
     queryFn: () =>
@@ -64,11 +64,35 @@ export default function CommitPage() {
     cacheTime: 1,
     enabled: !!selectedFile,
   })
-  console.log(fileChangesContent, 'fileChangesContent')
-
+  
+  useEffect(() => {
+    function extractDiffContent(diffString: string, fileName: string) {
+      const fileStartIndex = diffString?.indexOf(`diff --git a/${fileName} b/${fileName}`)
+      const stringLength = `diff --git a/${fileName} b/${fileName}`?.length
+      const fileEndIndex = diffString
+        ?.slice(fileStartIndex + stringLength + 1)
+        ?.indexOf('diff --git')
+      return diffString.slice(fileStartIndex, fileEndIndex)
+    }
+    if (fileChangesContent) {
+      console.log(fileChangesContent, 'fileChangesContent')
+      const extractDiffString = extractDiffContent(fileChangesContent, selectedFile?.path!)
+      const diffHtml = Diff2Html.html(extractDiffString, {
+        inputFormat: 'diff',
+        highlight: true,
+        //@ts-ignore
+        colorScheme: 'dark',
+        outputFormat: 'side-by-side',
+        drawFileList: true,
+        DiffStyleType: 'char',
+      })
+      setHtmlString(diffHtml)
+    }
+  }, [fileChangesContent, selectedFile])
   function handelFileSelect(file: string, ref: string) {
     setSelectedFile({ path: file, sha: ref })
   }
+
   return (
     <MainContainer
       linkProps={{
@@ -120,13 +144,19 @@ export default function CommitPage() {
               {isFileContentLoading ? (
                 <LoadingScreen size="m" />
               ) : fileContent ? (
-                <Editor
-                  file={{
-                    name: fileContent?.name,
-                    content: fileContent?.content,
-                    path: fileContent?.path,
-                  }}
-                />
+                htmlString ? (
+                  <>
+                    <Editor
+                      file={{
+                        name: fileContent?.name,
+                        content: fileContent?.content,
+                        path: fileContent?.path,
+                      }}
+                      htmlContent={htmlString}
+                    />
+                    <div id="container" />
+                  </>
+                ) : null
               ) : (
                 <div className="one-commit-page__content__blanc__one-file">
                   <img className="one-commit-page__content__blanc__one-file__src" src={emptyFile} />

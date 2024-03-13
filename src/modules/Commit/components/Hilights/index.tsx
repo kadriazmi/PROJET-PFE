@@ -2,7 +2,12 @@ import { Highlight, themes } from 'prism-react-renderer'
 import { useEffect, useState } from 'react'
 import FileExtensionIcon from '../FileExtensionIcon'
 
-export default function HilightCode({ file, readyToUse, language, addLinesNumbers }: any) {
+export default function HilightCode({
+  file,
+  readyToUse,
+  language,
+  addLinesNumbers,
+}: any) {
   const [newFile, setNewFile] = useState<{ content: string } | null>(null)
   useEffect(() => setNewFile(file), [file])
   function getFileExtension(filename: string) {
@@ -51,9 +56,10 @@ export default function HilightCode({ file, readyToUse, language, addLinesNumber
                 </div>
               )}
             </div>
+
             <div className="pre-editor_body">
               {tokens.map((line: any[], i: number) => (
-                <div key={i} {...getLineProps({ line })} >
+                <div key={i} {...getLineProps({ line })}>
                   {addLinesNumbers && <span className="line-number">{i + 1} </span>}
                   {line.map((token: any, key: React.Key | null | undefined) => (
                     <span key={key} {...getTokenProps({ token })} />

@@ -13,7 +13,7 @@
     @include Flex(column, start, start);
     gap: 0.5rem;
     &__one-file {
-      @include Flex(row , space-between);
+      @include Flex(row, space-between);
       @include GlassEffect();
       gap: 1rem;
       padding: 1rem;
@@ -29,7 +29,7 @@
           background: rgba(138, 138, 138, 0.381);
         }
       }
-      &__stats{
+      &__stats {
         @include Flex();
         gap: 1rem;
       }
@@ -66,12 +66,19 @@
     @include Flex(column, start, start);
     gap: 0.5rem;
     &__blanc {
-      @include Flex(column );
+      @include Flex(column);
       @include GlassEffect();
       width: 100%;
       min-height: 30rem;
       padding: 1rem;
       overflow: auto;
+      height: 56vh;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      &:has(.editor){
+        justify-content: flex-start
+      }
       &__one-file {
         @include Flex(column);
         gap: 1rem;
@@ -86,5 +93,33 @@
         }
       }
     }
+  }
+}
+
+.code-diff {
+  width: 100%;
+  overflow: hidden;
+  &__wrapper {
+    width: 100%;
+    animation: enter 0.3s ease-in-out;
+  }
+  .d2h-file-list-wrapper {
+    display: none;
+  }
+  * {
+    color: white;
+    line-height: 2;
+  }
+  .d2h-dark-color-scheme {
+    background: rgb(29, 29, 29) !important;
+  }
+  .d2h-del {
+    background-color: rgba(253, 0, 46, 0.5) !important;
+  }
+  .d2h-ins {
+    background-color: rgba(181, 255, 8, 0.5) !important;
+  }
+  .d2h-cntx {
+    background-color: rgba(70, 185, 242, 0.25) !important;
   }
 }
