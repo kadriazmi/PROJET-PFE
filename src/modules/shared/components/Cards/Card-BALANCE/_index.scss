@@ -1,0 +1,79 @@
+@use '../../../../shared/assets/styles/abstracts/mixins' as *;
+.card-balance {
+  position: relative;
+  width: 25rem;
+  height: 30rem;
+  @include GlassEffect();
+  padding: 1rem;
+  @include Flex(column, start);
+  overflow: hidden;
+  gap: 1rem;
+  transition: all 0.2s;
+  z-index: 10;
+  cursor: pointer;
+  animation: enter 0.5s ease-in-out;
+  &-title {
+    color: white;
+    font-size: 3rem;
+    font-weight: 500;
+  }
+  &-description {
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 300;
+    text-align: center;
+    white-space: pre-line;
+  }
+  &-loginbtn {
+    @include Flex();
+    border-radius: 8px;
+    position: absolute;
+    bottom: 3rem;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    height: fit-content;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.366);
+    background-image: linear-gradient(45deg, black 0%, rgba(255, 255, 255, 0.079) 51%, black 100%);
+    background-size: 200% auto;
+    touch-action: manipulation;
+    transition: 0.5s;
+    &:hover {
+      background-position: right center;
+    }
+    &-text {
+      color: white;
+      line-height: 1;
+    }
+    &-icon {
+      width: 1.5rem;
+      aspect-ratio: 1;
+    }
+  }
+  &-hover {
+    width: 10%;
+    aspect-ratio: 1;
+    background: linear-gradient(45deg, #4cf9f6, #ec735e, #ff00c8);
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(80px);
+    backdrop-filter: blur(1px);
+    box-shadow:
+      0 0 8rem #ff00c88a,
+      0 0 8rem #7ef6f496;
+    &::after {
+      content: '';
+      position: absolute;
+      width: 15rem;
+      aspect-ratio: 1;
+      background: linear-gradient(45deg, #5cffe9c1, #ec735efd, #ff00c8);
+      box-shadow: 0 0 10rem #ff00c8a5;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

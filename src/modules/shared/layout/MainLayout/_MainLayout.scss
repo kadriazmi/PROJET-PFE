@@ -1,0 +1,17 @@
+@use '../../../shared/assets/styles/abstracts/mixins' as *;
+.main-layout {
+  height: 100vh;
+  @include Flex(column, start);
+
+}
+
+
+
+@keyframes drop {
+  from {
+    top: -50%;
+  }
+  to {
+    top: 110%;
+  }
+}

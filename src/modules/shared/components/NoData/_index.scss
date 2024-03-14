@@ -1,0 +1,49 @@
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: enter 0.5s ease-in-out;
+  margin-top: 5rem;
+  &__image {
+    width: 15rem;
+    aspect-ratio: 1;
+    z-index: 2;
+    @media screen and (max-width: 1000px) {
+      width: 10rem;
+    }
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    width: 5rem;
+    height: 10rem;
+    top: 2rem;
+    z-index: 1;
+    background-color: transparent;
+    box-shadow: 0 0 6rem rgba(255, 255, 255, 0.704);
+    @media screen and (max-width: 1000px) {
+      width: 4rem;
+      height: 5rem;
+    }
+  }
+  &__title {
+    color: white;
+    font-size: 1.3rem;
+    padding-left: 3rem;
+    text-transform: capitalize;
+    @media screen and (max-width: 1000px) {
+        font-size: 1rem;
+      }
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,13 @@
+.loader-github {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg g g path {
+    stroke: rgb(255, 255, 255);
+    fill: rgb(255, 255, 255);
+  }
+  &--blur {
+    background: #b1b1b111;
+    backdrop-filter: blur(2px);
+  }
+}
