@@ -4,6 +4,7 @@ import dashboardRoutes from '../../dashboard/routes/routes'
 import repositoriesRoutes from '../../Repositories/routes/routes'
 import pullRequestsRoutes from '../../PullRequests/routes/routes'
 import commitRoutes from '../../Commit/routes/routes'
+import homeRoutes from '../../../home/routes'
 const routes = [
   ...sharedRoutes,
   ...authRoutes,
@@ -11,6 +12,7 @@ const routes = [
   ...repositoriesRoutes,
   ...pullRequestsRoutes,
   ...commitRoutes,
+  ...homeRoutes,
 ]
 
 export default routes

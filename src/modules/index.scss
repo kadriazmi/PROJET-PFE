@@ -4,3 +4,4 @@
 @forward './Repositories/index';
 @forward './PullRequests/index';
 @forward './Commit/index';
+@use '../home/index.scss' as *;
