@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Tooltip } from 'antd'
@@ -15,6 +15,7 @@ import {
   fetchOneFileChangesContent,
   fetchOneFileContent,
 } from '@src/modules/shared/store/Queries/Files'
+import ReviewButton from '@src/modules/shared/components/Buttons/Review'
 interface IOneCommitFile {
   filename: string
   sha: string
@@ -26,6 +27,7 @@ export default function CommitPage() {
   const { user } = useAppSelector((state) => state.auth)
   const [selectedFile, setSelectedFile] = useState<{ path: string; sha: string } | null>(null)
   const [htmlString, setHtmlString] = useState('')
+  const [isModalOpen, setModalState] = useState(false)
 
   const { data: commitContent, isLoading: isCommitContentLoading } = useQuery({
     queryFn: () =>
@@ -37,6 +39,7 @@ export default function CommitPage() {
     queryKey: ['oneCommit', {}],
     staleTime: Infinity,
     cacheTime: 1,
+    enabled: !!user,
   })
   const { data: fileContent, isLoading: isFileContentLoading } = useQuery({
     queryFn: () =>
@@ -64,7 +67,7 @@ export default function CommitPage() {
     cacheTime: 1,
     enabled: !!selectedFile,
   })
-  
+
   useEffect(() => {
     function extractDiffContent(diffString: string, fileName: string) {
       const fileStartIndex = diffString?.indexOf(`diff --git a/${fileName} b/${fileName}`)
@@ -82,7 +85,7 @@ export default function CommitPage() {
         highlight: true,
         //@ts-ignore
         colorScheme: 'dark',
-        outputFormat: 'side-by-side',
+        outputFormat: 'line-by-line',
         drawFileList: true,
         DiffStyleType: 'char',
       })
@@ -92,6 +95,8 @@ export default function CommitPage() {
   function handelFileSelect(file: string, ref: string) {
     setSelectedFile({ path: file, sha: ref })
   }
+
+  if (isCommitContentLoading) return <LoadingScreen blur size="full" />
 
   return (
     <MainContainer
@@ -105,42 +110,40 @@ export default function CommitPage() {
       }}
       style={{ paddingBottom: 0 }}
     >
-      {isCommitContentLoading ? (
-        <LoadingScreen blur />
-      ) : (
-        <div className="one-commit-page">
-          <div className="one-commit-page__files">
-            <p className="one-commit-page__files__title">Files :</p>
-            {commitContent?.files?.map((file: IOneCommitFile) => (
-              <div
-                className={`one-commit-page__files__one-file ${
-                  selectedFile?.path === file.filename
-                    ? 'one-commit-page__files__one-file--active'
-                    : ''
-                }`}
-                key={file.filename}
-                onClick={() => handelFileSelect(file.filename, commitContent.sha)}
-              >
-                <p className="one-commit-page__files__one-file__name">{file.filename}</p>
-                <div className="one-commit-page__files__one-file__stats">
-                  <Tooltip title={'deletions'} color={'#ef233c'}>
-                    <span className="one-commit-page__file-changes one-commit-page__file-changes--delete">
-                      {`${file?.deletions}`.padStart(2, '0')}
-                    </span>
-                  </Tooltip>
-                  <Tooltip title={'additions'} color={'#2dc653'}>
-                    <span className="one-commit-page__file-changes one-commit-page__file-changes--addition">
-                      {`${file?.additions}`.padStart(2, '0')}
-                    </span>
-                  </Tooltip>
-                </div>
+      <div className="one-commit-page">
+        <div className="one-commit-page__files">
+          <p className="one-commit-page__files__title">Files :</p>
+          {commitContent?.files?.map((file: IOneCommitFile) => (
+            <div
+              className={`one-commit-page__files__one-file ${
+                selectedFile?.path === file.filename
+                  ? 'one-commit-page__files__one-file--active'
+                  : ''
+              }`}
+              key={file.filename}
+              onClick={() => handelFileSelect(file.filename, commitContent.sha)}
+            >
+              <p className="one-commit-page__files__one-file__name">{file.filename}</p>
+              <div className="one-commit-page__files__one-file__stats">
+                <Tooltip title={'deletions'} color={'#ef233c'}>
+                  <span className="one-commit-page__file-changes one-commit-page__file-changes--delete">
+                    {`${file?.deletions}`.padStart(2, '0')}
+                  </span>
+                </Tooltip>
+                <Tooltip title={'additions'} color={'#2dc653'}>
+                  <span className="one-commit-page__file-changes one-commit-page__file-changes--addition">
+                    {`${file?.additions}`.padStart(2, '0')}
+                  </span>
+                </Tooltip>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
 
-          <div className="one-commit-page__content">
-            <p className="one-commit-page__files__title">File Content :</p>
-            <div className="one-commit-page__content__blanc">
+        <div className="one-commit-page__content">
+          <p className="one-commit-page__files__title">File Content :</p>
+          <div className="one-commit-page__content__blanc">
+            <div className="one-commit-page__content__blanc__editor">
               {isFileContentLoading ? (
                 <LoadingScreen size="m" />
               ) : fileContent ? (
@@ -153,6 +156,8 @@ export default function CommitPage() {
                         path: fileContent?.path,
                       }}
                       htmlContent={htmlString}
+                      isModalOpen={isModalOpen}
+                      setModalState={setModalState}
                     />
                     <div id="container" />
                   </>
@@ -166,9 +171,14 @@ export default function CommitPage() {
                 </div>
               )}
             </div>
+            {fileContent?.content && (
+              <div className="stream-wrapper__button">
+                <ReviewButton title={'Review changes'} onClick={() => setModalState(true)} />
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </MainContainer>
   )
 }

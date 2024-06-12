@@ -70,14 +70,19 @@
       @include GlassEffect();
       width: 100%;
       min-height: 30rem;
-      padding: 1rem;
-      overflow: auto;
-      height: 56vh;
-      &::-webkit-scrollbar {
-        display: none;
+      height: 50vh;
+
+      &:has(.editor) {
+        justify-content: flex-start;
       }
-      &:has(.editor){
-        justify-content: flex-start
+      &__editor {
+        width: 100%;
+        padding: 1rem;
+        position: relative;
+        overflow: auto;
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
       &__one-file {
         @include Flex(column);

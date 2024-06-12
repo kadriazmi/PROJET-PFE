@@ -18,6 +18,8 @@ export default function Repositories() {
   const handelRepoClick = (repo: string) => {
     navigate(PATH.PULLS.replace(':id', repo))
   }
+  if (isLoading) return <LoadingScreen blur size="full" />
+
   return (
     <MainContainer
       linkProps={{
@@ -26,31 +28,27 @@ export default function Repositories() {
       }}
       style={{ paddingBottom: 0 }}
     >
-      {isLoading ? (
-        <LoadingScreen blur/>
-      ) : (
-        <div className="repositories-container">
-          {!repositories || repositories?.length === 0 ? (
-            <NoData title={`no repositories yet `} />
-          ) : (
-            repositories?.map((repo: { name: string; visibility: string }, i: number) => (
-              <CardSkew autoColors={i + 1}>
-                <div
-                  className="repositories-container__card"
-                  onClick={() => handelRepoClick(repo?.name)}
-                >
-                  <p className="repositories-container__card__title">{repo?.name}</p>
-                  <div className="repositories-container__card__visibility">
-                    <p className="repositories-container__card__visibility__status">
-                      {repo?.visibility}
-                    </p>
-                  </div>
+      <div className="repositories-container">
+        {!repositories || repositories?.length === 0 ? (
+          <NoData title={`no repositories yet `} />
+        ) : (
+          repositories?.map((repo: { name: string; visibility: string }, i: number) => (
+            <CardSkew autoColors={i + 1}>
+              <div
+                className="repositories-container__card"
+                onClick={() => handelRepoClick(repo?.name)}
+              >
+                <p className="repositories-container__card__title">{repo?.name}</p>
+                <div className="repositories-container__card__visibility">
+                  <p className="repositories-container__card__visibility__status">
+                    {repo?.visibility}
+                  </p>
                 </div>
-              </CardSkew>
-            ))
-          )}
-        </div>
-      )}
+              </div>
+            </CardSkew>
+          ))
+        )}
+      </div>
     </MainContainer>
   )
 }

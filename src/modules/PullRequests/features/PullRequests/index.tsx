@@ -56,8 +56,9 @@ export default function PullRequests() {
     head: string
   }) => {
     setSearchParams({ base, head })
-    navigate(PATH.COMMIT.replace(':id', id!).replace(':commitId', commitId));
+    navigate(PATH.COMMIT.replace(':id', id!).replace(':commitId', commitId))
   }
+  if (isPullRequestsLoading) return <LoadingScreen blur size="full" />
   return (
     <MainContainer
       linkProps={{
@@ -69,32 +70,28 @@ export default function PullRequests() {
       }}
       style={{ paddingBottom: 0 }}
     >
-      {isPullRequestsLoading ? (
-        <LoadingScreen blur />
-      ) : (
-        <div className="pull-requests__container">
-          {pullRequests?.length === 0 ? (
-            <NoData title={`no pull requests in ${id!} `} />
-          ) : (
-            <div className="pull-request">
-              <Collapse
-                items={pullRequests?.map((pull: IPullRequest) => ({
-                  key: `${pull.number}`,
-                  label: <OnePullRequest pull={pull} />,
-                  children: (
-                    <Commits
-                      currentPullRequestRef={`${pull.number}`}
-                      handelSelectCommit={(commitId) =>
-                        handelSelectCommit({ commitId, head: pull.head.sha, base: pull.base.sha })
-                      }
-                    />
-                  ),
-                }))}
-              />
-            </div>
-          )}
-        </div>
-      )}
+      <div className="pull-requests__container">
+        {pullRequests?.length === 0 ? (
+          <NoData title={`no pull requests in ${id!} `} />
+        ) : (
+          <div className="pull-request">
+            <Collapse
+              items={pullRequests?.map((pull: IPullRequest) => ({
+                key: `${pull.number}`,
+                label: <OnePullRequest pull={pull} />,
+                children: (
+                  <Commits
+                    currentPullRequestRef={`${pull.number}`}
+                    handelSelectCommit={(commitId) =>
+                      handelSelectCommit({ commitId, head: pull.head.sha, base: pull.base.sha })
+                    }
+                  />
+                ),
+              }))}
+            />
+          </div>
+        )}
+      </div>
     </MainContainer>
   )
 }

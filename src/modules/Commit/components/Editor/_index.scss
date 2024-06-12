@@ -9,7 +9,8 @@
   justify-content: center;
   gap: 1.5rem;
   padding-bottom: 1rem;
-  &:has(pre) , &:has(.code-diff) {
+  &:has(pre),
+  &:has(.code-diff) {
     align-items: end;
   }
   &:has(.stream-wrapper__text) {
@@ -164,6 +165,15 @@
   &::-webkit-scrollbar-track {
     background: rgba(226, 225, 225, 0.93);
   }
+  &__button {
+    padding: 0.8rem;
+    width: 100%;
+    @include Flex(row, flex-end);
+    bottom: 0;
+    position: fixed;
+    backdrop-filter: blur(2px);
+    background: rgba(92, 92, 92, 0.174);
+  }
   &__text {
     @include Flex(column, start, start);
     width: 100%;
@@ -174,12 +184,11 @@
     @include GlassEffect();
     background: rgba(45, 45, 45, 0.867);
     padding: 1rem;
-    border-radius:  1rem;
+    border-radius: 1rem;
     position: relative;
     &__user {
       @include Flex();
       gap: 1rem;
-
     }
     &__avatar {
       width: 2rem;

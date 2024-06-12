@@ -7,8 +7,9 @@ interface MainLayoutProps {
 }
 
 const GuestGuard = ({ children }: MainLayoutProps) => {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  return isAuthenticated ? <Navigate to={PATH.REPO} /> : children
+  const { status, isAuthenticated } = useAppSelector((state) => state.auth)
+  const isShowChildren = isAuthenticated || status != 'succeeded'
+  return isShowChildren ? <Navigate to={PATH.REPO} /> : children
 }
 
 export default GuestGuard

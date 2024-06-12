@@ -1,6 +1,6 @@
 import ReviewButton from '@src/modules/shared/components/Buttons/Review'
 import { Modal } from 'antd'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import emptyFileIcon from '../../../shared/assets/icons/svgs/no-data.svg'
 import HilightCode from '../Hilights'
 import StreamComponent from '../Stream'
@@ -13,9 +13,16 @@ interface IFile {
   }
   readyToUse?: string
   htmlContent?: string
+  isModalOpen: boolean
+  setModalState: Dispatch<SetStateAction<boolean>>
 }
-export default function Editor({ file, readyToUse, htmlContent }: IFile) {
-  const [isModalOpen, setModalState] = useState(false)
+export default function Editor({
+  file,
+  readyToUse,
+  htmlContent,
+  isModalOpen,
+  setModalState,
+}: IFile) {
   return (
     <div className="editor">
       {file.content || htmlContent ? (
@@ -27,7 +34,6 @@ export default function Editor({ file, readyToUse, htmlContent }: IFile) {
           ) : file.content ? (
             <HilightCode file={file} addLinesNumbers readyToUse={readyToUse} />
           ) : null}
-          <ReviewButton title={'Review changes'} onClick={() => setModalState(true)} />
         </>
       ) : (
         <div className="one-commit-page__content__blanc__one-file">
