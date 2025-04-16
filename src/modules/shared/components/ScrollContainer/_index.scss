@@ -3,6 +3,9 @@
   height: 100%;
   overflow: auto;
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rem;
   &::-webkit-scrollbar {
     display: none;
   }

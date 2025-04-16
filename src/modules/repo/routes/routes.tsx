@@ -4,6 +4,7 @@ import { RouteProps } from 'react-router-dom'
 import UniverseWrapper from '@src/modules/shared/layout/UniverseWrapper'
 import { PATH } from '@src/modules/auth/routes/paths'
 import AuthGuard from '@src/modules/shared/guards/AuthGuard'
+import MainLayout from '@src/modules/shared/layout/MainLayout/MainLayout'
 
 type RouteConfig = {
   exact: boolean | null
@@ -19,7 +20,7 @@ const routes: RouteConfig[] = [
     guard: AuthGuard,
     path: PATH.REPO,
     component: lazy(() => import('../index')),
-    layout: (props: any) => <UniverseWrapper {...props} />,
+    layout: MainLayout,
   },
 ]
 

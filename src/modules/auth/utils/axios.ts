@@ -8,9 +8,10 @@ const headers = {
 }
 
 const axiosInstance = axios.create({
-  baseURL,
-  headers,
-  // withCredentials: true,
+  baseURL: 'https://api.github.com',
+  headers: {
+    Authorization: `Bearer access_token`,
+  },
 })
 
 axiosInstance.interceptors.request.use(
