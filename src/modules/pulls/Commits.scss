@@ -1,0 +1,47 @@
+.commits {
+  padding: 1rem;
+  background-color: rgba(117, 117, 117, 0.2);
+
+  .commits-badge {
+    display: inline-block;
+    background: #e79614;
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5.16px;
+    font-size: 13.8px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .commit-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem;
+    border-radius: 8.6px;
+    margin-bottom: 1rem;
+
+    .commit-avatar {
+      width: 30.95px;
+      height: 30.95px;
+      border-radius: 50%;
+      border: 1px dashed #757575;
+    }
+
+    .commit-info {
+      flex: 1;
+      margin-left: 1rem;
+
+      .commit-message {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #fff;
+      }
+    }
+
+    .commit-date {
+      font-size: 0.85rem;
+      color: #a7a7a7;
+    }
+  }
+}

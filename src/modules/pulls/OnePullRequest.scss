@@ -1,0 +1,66 @@
+.one-pull-request {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  width: 900px;
+
+  .pr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .pr-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .pr-icon {
+        font-size: 1rem;
+        color: #fff;
+      }
+    }
+
+    .pr-created {
+      font-size: 0.9rem;
+      color: #c8c7c7;
+    }
+
+    .pr-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .user-avatar {
+        width: 30.95px;
+        height: 30.95px;
+        border-radius: 50%;
+        border: 1px dashed #757575;
+      }
+
+      .pr-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .status-text {
+          font-size: 0.9rem;
+          color: #008000;
+          font-weight: 600;
+        }
+
+        .status-icon {
+          color: #008000;
+        }
+      }
+    }
+  }
+
+  .pr-updated {
+    font-size: 0.9rem;
+    color: #c8c7c7;
+  }
+}

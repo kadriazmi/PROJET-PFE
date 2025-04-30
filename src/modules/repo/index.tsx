@@ -4,14 +4,19 @@ import NoData from '../shared/components/NoData'
 import { fetchGitHubRepos } from './API/api'
 import LoadingScreen from '../shared/components/Loading'
 import MainContainer from '../shared/layout/MainContainer/MainContainer'
+import { useNavigate } from 'react-router-dom'
 
 const RepoPage = () => {
+  const navigate = useNavigate()
   const { data, isLoading } = useQuery({
     queryFn: () => fetchGitHubRepos(),
     queryKey: ['repo', {}],
     cacheTime: 1, // Cache data to reuse without component re-render
     enabled: true, // Replace true with a condition for execution control
   })
+  const handleCardClick = (repoName: string) => {
+    navigate(`/repositories/${repoName}/pulls`)
+  }
   if (isLoading) {
     return <LoadingScreen size="full" blur />
   }
@@ -24,7 +29,7 @@ const RepoPage = () => {
       linkProps={{ title: 'Repositories', links: [{ name: 'Repositories', href: '' }] }}
     >
       {data?.map((repo, index: number) => (
-        <CardSkew key={repo.id} autoColors={index + 1}>
+        <CardSkew key={repo.id} autoColors={index + 1} onClick={() => handleCardClick(repo.name)}>
           <p>{repo.name}</p>
         </CardSkew>
       ))}
