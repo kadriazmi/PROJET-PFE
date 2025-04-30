@@ -1,13 +1,11 @@
-import React from 'react'
-import { FaCodeBranch, FaEllipsisV } from 'react-icons/fa'
+import { FaCodeBranch } from 'react-icons/fa'
 import { AiOutlineCheckCircle } from 'react-icons/ai'
-import './OnePullRequest.scss'
 
 interface OnePullRequestProps {
   pull: any
 }
 
-const OnePullRequest: React.FC<OnePullRequestProps> = ({ pull }) => {
+const OnePullRequest: React.FC<OnePullRequestProps> = ({ pull }: any) => {
   return (
     <div className="one-pull-request">
       <div className="pr-header">

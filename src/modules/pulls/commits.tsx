@@ -1,16 +1,19 @@
-import React from 'react'
-import { useQuery } from 'react-query'
-import { fetchCommits } from './api/api'
 import LoadingScreen from '@src/modules/shared/components/Loading'
-import './Commits.scss'
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
+import { useAppSelector } from '../shared/store'
+import { fetchCommits } from './API/api'
 
 interface CommitsProps {
   pullNumber: number
 }
 
-const Commits: React.FC<CommitsProps> = ({ pullNumber }) => {
+const Commits: React.FC<CommitsProps> = ({ pullNumber }: { pullNumber: number }) => {
+  const { id } = useParams<{ id: string }>()
+  const { user } = useAppSelector((state) => state.auth)
+  const username = user?.user_metadata.user_name
   const { data: commits, isLoading } = useQuery(['commits', pullNumber], () =>
-    fetchCommits('kadriazmi', 'PROJET-PFE', pullNumber)
+    fetchCommits(username!, id!, pullNumber)
   )
 
   if (isLoading) {

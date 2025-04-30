@@ -1,17 +1,19 @@
 import { useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
-import { fetchPullRequests } from './api/api'
+import { fetchPullRequests } from './API/api'
 import LoadingScreen from '@src/modules/shared/components/Loading'
 import NoData from '@src/modules/shared/components/NoData'
 import { Collapse } from 'antd'
-import OnePullRequest from './OnePullRequest'
-import Commits from './Commits'
-import './styles.scss'
+import OnePullRequest from './onepullrequest'
+import Commits from './commits'
 import MainContainer from '../shared/layout/MainContainer/MainContainer'
+import { useAppSelector } from '../shared/store'
 const Pulls = () => {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAppSelector((state) => state.auth)
+  const username = user?.user_metadata.user_name
   const { data: pullRequests, isLoading } = useQuery(['pullRequests', id], () =>
-    fetchPullRequests('kadriazmi', id)
+    fetchPullRequests(username!, id!)
   )
 
   if (isLoading) {

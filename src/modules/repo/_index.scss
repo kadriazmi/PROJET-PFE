@@ -1,0 +1,7 @@
+@use '../shared/assets/styles/abstracts/mixins' as *;
+.repositories {
+  @include Flex();
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
