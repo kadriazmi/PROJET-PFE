@@ -7,7 +7,7 @@ import MainContainer from '../shared/layout/MainContainer/MainContainer'
 
 const RepoPage = () => {
   const { data, isLoading } = useQuery({
-    queryFn: () => fetchGitHubRepos(),
+    queryFn: () => fetchGitHubRepo(),
     queryKey: ['repo', {}],
     cacheTime: 1, // Cache data to reuse without component re-render
     enabled: true, // Replace true with a condition for execution control
