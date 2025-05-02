@@ -6,13 +6,22 @@ interface OnePullRequestProps {
 }
 
 const OnePullRequest: React.FC<OnePullRequestProps> = ({ pull }: any) => {
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    return `${year}-${month}-${day} ${hours}:${minutes}`
+  }
   return (
     <div className="one-pull-request">
       <div className="pr-header">
         <h3 className="pr-title">
           {pull.title} <FaCodeBranch className="pr-icon" />
         </h3>
-        <p className="pr-created">Created At: {new Date(pull.created_at).toLocaleString()}</p>
+
         <div className="pr-right">
           <img
             src={pull.user.avatar_url}
@@ -25,7 +34,10 @@ const OnePullRequest: React.FC<OnePullRequestProps> = ({ pull }: any) => {
           </div>
         </div>
       </div>
-      <p className="pr-updated">Updated At: {new Date(pull.updated_at).toLocaleString()}</p>
+      <div className="pr-time">
+        <p className="pr-created">Created At: {formatDateTime(pull.created_at).toLocaleString()}</p>
+        <p className="pr-updated">Updated At: {formatDateTime(pull.updated_at).toLocaleString()}</p>
+      </div>
     </div>
   )
 }
