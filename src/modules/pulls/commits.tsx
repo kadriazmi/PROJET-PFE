@@ -1,6 +1,6 @@
 import LoadingScreen from '@src/modules/shared/components/Loading'
 import { useQuery } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAppSelector } from '../shared/store'
 import { fetchCommits } from './API/api'
 
@@ -15,6 +15,10 @@ const Commits: React.FC<CommitsProps> = ({ pullNumber }: { pullNumber: number })
   const { data: commits, isLoading } = useQuery(['commits', pullNumber], () =>
     fetchCommits(username!, id!, pullNumber)
   )
+  const navigate = useNavigate()
+  const handleCommitClick = (commitSHA: string) => {
+    navigate(`/repositories/${id}/pulls/commit/${commitSHA}`)
+  }
 
   if (isLoading) {
     return <LoadingScreen size="s" />
@@ -38,7 +42,12 @@ const Commits: React.FC<CommitsProps> = ({ pullNumber }: { pullNumber: number })
     <div className="commits">
       <span className="commits-badge">Commits List:</span>
       {commits.map((commit: any) => (
-        <div key={commit.sha} className="commit-item">
+        <div
+          key={commit.sha}
+          className="commit-item"
+          onClick={() => handleCommitClick(commit.sha)}
+          style={{ cursor: 'pointer' }}
+        >
           <img
             src={commit.author?.avatar_url || ''}
             alt="Commit Author Avatar"

@@ -1,0 +1,21 @@
+.file-bar {
+  min-width: 200px;
+  background: #222;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  height: 100%;
+}
+.file-bar__item {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: #333;
+  }
+}
+.file-bar__item--active {
+  background: #444;
+  font-weight: bold;
+}

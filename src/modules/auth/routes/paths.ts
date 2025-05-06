@@ -5,4 +5,5 @@ export const PATH = {
   HOME: '/home',
   REPO: '/repositories',
   PULLS: '/repositories/:id/pulls',
+  COMMIT: '/repositories/:id/pulls/commit/:commitSHA',
 }
