@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const RepoPage = () => {
   const navigate = useNavigate()
   const { data, isLoading } = useQuery({
-    queryFn: () => fetchGitHubRepos(),
+    queryFn: () => fetchGitHubRepo(),
     queryKey: ['repo', {}],
     cacheTime: 1, // Cache data to reuse without component re-render
     enabled: true, // Replace true with a condition for execution control
@@ -38,3 +38,5 @@ const RepoPage = () => {
 }
 
 export default RepoPage
+
+// working with pulls branch
