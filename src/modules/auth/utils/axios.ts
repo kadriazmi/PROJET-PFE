@@ -8,16 +8,14 @@ const headers = {
 }
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.github.com',
-  headers: {
-    Authorization: `Bearer access_token`,
-  },
+  baseURL,
+  headers,
 })
 
 axiosInstance.interceptors.request.use(
   (config) => {
     const { access_token } = getTokens()
-    console.log(access_token, 'token')
+
     if (access_token) {
       config.headers['Authorization'] = `Bearer ${access_token}`
     }

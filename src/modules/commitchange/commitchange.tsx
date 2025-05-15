@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useAppSelector } from '../shared/store'
-import axiosInstance from '@src/modules/auth/utils/axios'
-import { endpoints } from '@src/modules/shared/store/routes/endpoints.routes'
+import { fetchCommitChanges, fetchCommitDiff } from '@src/modules/commitChange/API/api'
+import { Tooltip } from 'antd'
 import * as Diff2Html from 'diff2html'
 import 'diff2html/bundles/css/diff2html.min.css'
-import './CommitChange.scss'
-import './filebar.scss'
-import LoadingScreen from '@src/modules/shared/components/Loading'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
+import emptyFile from '../shared/assets/images/folder_empty.png'
+import ReviewButton from '../shared/components/Buttons/Review'
 import MainContainer from '../shared/layout/MainContainer/MainContainer'
+import { useAppSelector } from '../shared/store'
 
 function splitDiffByFiles(diffString: string) {
   const files = diffString.split(/^diff --git /gm).slice(1)
+
   return files.map((fileBlock) => {
     const lines = fileBlock.split('\n')
     const match = lines[0].match(/^a\/(.+?)\s/)
@@ -20,51 +21,45 @@ function splitDiffByFiles(diffString: string) {
   })
 }
 
-const CommitChange = () => {
-  const { id } = useParams<{ id: string }>()
-  const { commitSHA } = useParams<{ commitSHA: string }>()
+const CommitChanges = () => {
+  const { commitSHA, id } = useParams()
   const { user } = useAppSelector((state) => state.auth)
   const username = user?.user_metadata.user_name
-  const repo = id
   const [commitMessage, setCommitMessage] = useState<string>('')
-  const [diffString, setDiffString] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [fileDiffs, setFileDiffs] = useState<{ fileName: string; diff: string }[]>([])
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
+  const [filesDiff, setFilesDiff] = useState<{ fileName: string; diff: string }[] | null>(null)
 
-  useEffect(() => {
-    const fetchDiff = async () => {
-      try {
-        const url = endpoints.getOneFileChanges
-          .replace(':owner', username)
-          .replace(':repo', repo)
-          .replace(':sha', commitSHA!)
-        const commitRes = await axiosInstance.get(url)
-        setCommitMessage(commitRes.data.commit.message)
-        const diffRes = await axiosInstance.get(url, {
-          headers: { Accept: 'application/vnd.github.v3.diff; charset=utf-8' },
-        })
-        setDiffString(diffRes.data)
-        const diffs = splitDiffByFiles(diffRes.data)
-        setFileDiffs(diffs)
-        if (diffs.length > 0) setSelectedFile(diffs[0].fileName)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchDiff()
-  }, [commitSHA, username, repo])
+  const { data } = useQuery({
+    queryKey: ['commitChanges', commitSHA],
+    queryFn: () => fetchCommitChanges(username, id!, commitSHA!),
+    onSuccess: (data) => {
+      setCommitMessage(data?.commit?.message!)
+    },
+  })
+  useQuery({
+    queryKey: ['commit-diff', commitSHA],
+    queryFn: () => fetchCommitDiff(username, id!, commitSHA!),
+    onSuccess: (data) => {
+      setFilesDiff(splitDiffByFiles(data!))
+    },
+  })
 
-  if (isLoading) {
-    return <LoadingScreen size="s" />
-  }
+  const files = data?.files || []
 
-  if (!diffString || fileDiffs.length === 0) {
-    return <p>No changes found for this commit.</p>
-  }
+  const selectedFileDiff = filesDiff?.find((file: any) => file.fileName === selectedFile)
+  const diffHtml =
+    !!selectedFileDiff &&
+    Diff2Html.html(selectedFileDiff?.diff!, {
+      inputFormat: 'diff',
+      highlight: true,
+      //@ts-ignore
+      colorScheme: 'dark',
+      outputFormat: 'line-by-line',
+      drawFileList: true,
+      DiffStyleType: 'char',
+    })
 
+  console.log({ selectedFileDiff, selectedFile, filesDiff })
   return (
     <MainContainer
       linkProps={{
@@ -72,45 +67,65 @@ const CommitChange = () => {
         links: [
           { name: 'Repositories', href: '/repositories' },
           { name: 'Pull Requests', href: `/repositories/${id}/pulls` },
-          { name: 'Commit', href: '' },
+          { name: 'Commits'!, href: '' },
         ],
       }}
     >
-      <div className="commit-change" style={{ display: 'flex' }}>
-        <div className="file-bar">
-          {fileDiffs.map((file) => (
+      <div className="one-commit-page">
+        <div className="one-commit-page__files">
+          <p className="one-commit-page__files__title">Files :</p>
+          {files?.map((file: any) => (
             <div
-              key={file.fileName}
-              className={`file-bar__item${
-                selectedFile === file.fileName ? ' file-bar__item--active' : ''
+              className={`one-commit-page__files__one-file ${
+                selectedFile === file.filename ? 'one-commit-page__files__one-file--active' : ''
               }`}
-              onClick={() => setSelectedFile(file.fileName)}
+              key={file.filename}
+              onClick={() => setSelectedFile(file?.filename)}
             >
-              {file.fileName}
+              <p className="one-commit-page__files__one-file__name">{file.filename}</p>
+              <div className="one-commit-page__files__one-file__stats">
+                <Tooltip title={'deletions'} color={'#ef233c'}>
+                  <span className="one-commit-page__file-changes one-commit-page__file-changes--delete">
+                    {`${file?.deletions}`.padStart(2, '0')}
+                  </span>
+                </Tooltip>
+                <Tooltip title={'additions'} color={'#2dc653'}>
+                  <span className="one-commit-page__file-changes one-commit-page__file-changes--addition">
+                    {`${file?.additions}`.padStart(2, '0')}
+                  </span>
+                </Tooltip>
+              </div>
             </div>
           ))}
         </div>
-        <div className="code-diff__wrapper" style={{ flex: 1 }}>
-          <div
-            className="code-diff"
-            dangerouslySetInnerHTML={{
-              __html: Diff2Html.html(
-                fileDiffs.find((f) => f.fileName === selectedFile)?.diff || '',
-                {
-                  inputFormat: 'diff',
-                  highlight: true,
-                  colorScheme: 'dark',
-                  outputFormat: 'line-by-line',
-                  drawFileList: false,
-                  DiffStyleType: 'char',
-                }
-              ),
-            }}
-          />
+
+        <div className="one-commit-page__content">
+          <p className="one-commit-page__files__title">File Content :</p>
+          <div className="one-commit-page__content__blanc">
+            <div className="one-commit-page__content__blanc__editor">
+              {!!selectedFileDiff?.diff ? (
+                <div className="code-diff__wrapper">
+                  <div className="code-diff" dangerouslySetInnerHTML={{ __html: diffHtml }} />
+                </div>
+              ) : (
+                <div className="one-commit-page__content__blanc__one-file">
+                  <img className="one-commit-page__content__blanc__one-file__src" src={emptyFile} />
+                  <p className="one-commit-page__content__blanc__one-file__message">
+                    no file selected
+                  </p>
+                </div>
+              )}
+              {!!selectedFileDiff?.diff ? (
+                <div className="stream-wrapper__button">
+                  <ReviewButton title={'Review changes'} onClick={() => console.log('hello')} />
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
     </MainContainer>
   )
 }
 
-export default CommitChange
+export default CommitChanges
