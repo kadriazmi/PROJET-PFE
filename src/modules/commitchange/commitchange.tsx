@@ -1,5 +1,5 @@
 import { fetchCommitChanges, fetchCommitDiff } from '@src/modules/commitChange/API/api'
-import { Tooltip } from 'antd'
+import { Modal, Tooltip } from 'antd'
 import * as Diff2Html from 'diff2html'
 import 'diff2html/bundles/css/diff2html.min.css'
 import { useState } from 'react'
@@ -9,6 +9,8 @@ import emptyFile from '../shared/assets/images/folder_empty.png'
 import ReviewButton from '../shared/components/Buttons/Review'
 import MainContainer from '../shared/layout/MainContainer/MainContainer'
 import { useAppSelector } from '../shared/store'
+
+import StreamComponent from '@src/modules/commitchange/review'
 
 function splitDiffByFiles(diffString: string) {
   const files = diffString.split(/^diff --git /gm).slice(1)
@@ -28,6 +30,8 @@ const CommitChanges = () => {
   const [commitMessage, setCommitMessage] = useState<string>('')
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
   const [filesDiff, setFilesDiff] = useState<{ fileName: string; diff: string }[] | null>(null)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data } = useQuery({
     queryKey: ['commitChanges', commitSHA],
@@ -117,13 +121,22 @@ const CommitChanges = () => {
               )}
               {!!selectedFileDiff?.diff ? (
                 <div className="stream-wrapper__button">
-                  <ReviewButton title={'Review changes'} onClick={() => console.log('hello')} />
+                  <ReviewButton title={'Review changes'} onClick={() => setIsModalOpen(true)} />
                 </div>
               ) : null}
             </div>
           </div>
         </div>
       </div>
+      <Modal
+        open={isModalOpen}
+        key={selectedFile}
+        onCancel={() => setIsModalOpen(false)}
+        title="Code Review"
+        className="editor__modal"
+      >
+        <StreamComponent code={selectedFileDiff?.diff || ''} filename={selectedFile || ''} />
+      </Modal>
     </MainContainer>
   )
 }
