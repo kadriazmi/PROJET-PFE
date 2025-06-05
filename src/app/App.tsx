@@ -17,7 +17,7 @@ const App = () => {
     dispatch(login())
   }, [])
   return (
-    <div id={theme}>
+    <div id={theme} className="app">
       <Helmet>
         <title>Welcome - Github code reviewer</title>
       </Helmet>

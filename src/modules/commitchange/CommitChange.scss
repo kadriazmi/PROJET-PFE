@@ -162,7 +162,7 @@
   }
   .ant-modal-title {
     background: transparent;
-    color: white !important;
+    // color: white !important;
     font-weight: 800 !important;
     font-size: 1.2rem !important;
   }
@@ -182,7 +182,7 @@
   padding: 1rem;
   overflow: auto;
   border-radius: 1rem 1rem 0 0;
-  background-image: url('../shared/assets/images/chat-space.jpeg');
+  background-image: url('../modules/shared/assets/images/chat-space.jpeg');
   background-size: contain;
   &::-webkit-scrollbar {
     background: rgba(0, 0, 0, 0.976);

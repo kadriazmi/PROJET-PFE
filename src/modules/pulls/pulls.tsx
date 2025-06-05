@@ -12,9 +12,11 @@ const Pulls = () => {
   const { id } = useParams<{ id: string }>()
   const { user } = useAppSelector((state) => state.auth)
   const username = user?.user_metadata.user_name
-  const { data: pullRequests, isLoading } = useQuery(['pullRequests', id], () =>
-    fetchPullRequests(username!, id!)
-  )
+  const { data: pullRequests, isLoading } = useQuery({
+    queryKey: ['pullRequests', username, id],
+    queryFn: () => fetchPullRequests(username!, id!),
+    enabled: !!username && !!id,
+  })
 
   if (isLoading) {
     return <LoadingScreen size="full" blur />

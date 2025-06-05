@@ -12,9 +12,11 @@ const Commits: React.FC<CommitsProps> = ({ pullNumber }: { pullNumber: number })
   const { id } = useParams<{ id: string }>()
   const { user } = useAppSelector((state) => state.auth)
   const username = user?.user_metadata.user_name
-  const { data: commits, isLoading } = useQuery(['commits', pullNumber], () =>
-    fetchCommits(username!, id!, pullNumber)
-  )
+  const { data: commits, isLoading } = useQuery({
+    queryKey: ['commits', pullNumber],
+    queryFn: () => fetchCommits(username!, id!, pullNumber),
+    enabled: !!username,
+  })
   const navigate = useNavigate()
   const handleCommitClick = (commitSHA: string) => {
     navigate(`/repositories/${id}/pulls/commit/${commitSHA}`)

@@ -9,8 +9,8 @@ import emptyFile from '../shared/assets/images/folder_empty.png'
 import ReviewButton from '../shared/components/Buttons/Review'
 import MainContainer from '../shared/layout/MainContainer/MainContainer'
 import { useAppSelector } from '../shared/store'
-
-import StreamComponent from '@src/modules/commitchange/review'
+import StreamComponent from './review'
+import LoadingScreen from '../shared/components/Loading'
 
 function splitDiffByFiles(diffString: string) {
   const files = diffString.split(/^diff --git /gm).slice(1)
@@ -33,12 +33,13 @@ const CommitChanges = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['commitChanges', commitSHA],
     queryFn: () => fetchCommitChanges(username, id!, commitSHA!),
     onSuccess: (data) => {
       setCommitMessage(data?.commit?.message!)
     },
+    enabled: !!username && !!id && !!commitSHA,
   })
   useQuery({
     queryKey: ['commit-diff', commitSHA],
@@ -46,6 +47,7 @@ const CommitChanges = () => {
     onSuccess: (data) => {
       setFilesDiff(splitDiffByFiles(data!))
     },
+    enabled: !!username && !!id && !!commitSHA,
   })
 
   const files = data?.files || []
@@ -63,7 +65,7 @@ const CommitChanges = () => {
       DiffStyleType: 'char',
     })
 
-  console.log({ selectedFileDiff, selectedFile, filesDiff })
+  if (isLoading) return <LoadingScreen size="full" blur />
   return (
     <MainContainer
       linkProps={{
@@ -135,7 +137,7 @@ const CommitChanges = () => {
         title="Code Review"
         className="editor__modal"
       >
-        <StreamComponent code={selectedFileDiff?.diff || ''} filename={selectedFile || ''} />
+        <StreamComponent prompt={selectedFileDiff?.diff || ''} />
       </Modal>
     </MainContainer>
   )

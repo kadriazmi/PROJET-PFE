@@ -9,7 +9,8 @@
   justify-content: center;
   gap: 1.5rem;
   padding-bottom: 1rem;
-  &:has(pre) , &:has(.code-diff) {
+  &:has(pre),
+  &:has(.code-diff) {
     align-items: end;
   }
   &:has(.stream-wrapper__text) {

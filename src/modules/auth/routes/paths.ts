@@ -1,8 +1,7 @@
 export const PATH = {
-  ROOT: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  HOME: '/home',
+  HOME: '/',
   REPO: '/repositories',
   PULLS: '/repositories/:id/pulls',
   COMMIT: '/repositories/:id/pulls/commit/:commitSHA',

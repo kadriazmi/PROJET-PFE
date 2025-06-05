@@ -29,7 +29,7 @@ const RepoPage = () => {
       linkProps={{ title: 'Repositories', links: [{ name: 'Repositories', href: '' }] }}
     >
       <div className="repositories">
-        {data?.map((repo, index: number) => (
+        {data?.map((repo: any, index: number) => (
           <CardSkew key={repo.id} autoColors={index + 1} onClick={() => handleCardClick(repo.name)}>
             <p>{repo.name}</p>
           </CardSkew>
